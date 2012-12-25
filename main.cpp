@@ -2,22 +2,22 @@
 #include <QCoreApplication>
 #include <QtGui>
 
+qint8 roll_dice();
+void play_game();
+
 qint8 roll_dice()
 {
     return rand() % 6 + 1;
 }
 
-int main(int argc, char *argv[])
+void play_game()
 {
-    QApplication app(argc, argv);
-    QString response = QString("%1\nDICE 1: %2\nDICE 2: %3\n SUM: %4");
+    QString response;
     QString message_title;
     bool continue_game;
     int first_dice;
     int second_dice;
     int sum_dice;
-    int answer;
-
     srand(time(0));
 
     do {
@@ -51,20 +51,30 @@ int main(int argc, char *argv[])
                         .arg(first_dice)
                         .arg(second_dice)
                         .arg(sum_dice);
-                QMessageBox::information(
-                            0,          // Parent
-                            "Dice Results", // Title
-                            response);
 
         }
-    } while (true == continue_game);
-
-    answer = QMessageBox::question(
+        QMessageBox::information(
                     0,          // Parent
-                    "You Win",  // Title
-                    response,   // Response
-                    QMessageBox::Yes | QMessageBox::No
+                    "Dice Results", // Title
+                    response);
+    } while (true == continue_game);
+}
+
+int main(int argc, char *argv[])
+{
+    QApplication app(argc, argv);
+    int answer;
+
+
+    do {
+        play_game();
+        answer = QMessageBox::question(
+                        0,          // Parent
+                        "Game Results",  // Title
+                        "Do you want to play again?",   // Response
+                        QMessageBox::Yes | QMessageBox::No
                     );
+    } while(QMessageBox::Yes == answer);
 
     return EXIT_SUCCESS;
 }
